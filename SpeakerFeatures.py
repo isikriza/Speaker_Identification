@@ -8,9 +8,8 @@ import numpy as np
 from sklearn import preprocessing
 import python_speech_features as mfcc
 
-def calculate_delta(array):
-    
-    rows,cols = array.shape
+def delta(arr):
+    rows,cols = arr.shape
     deltas = np.zeros((rows,20))
     N = 2
     for i in range(rows):
@@ -27,15 +26,13 @@ def calculate_delta(array):
                 second = i+j
             index.append((second,first))
             j+=1
-        deltas[i] = ( array[index[0][0]]-array[index[0][1]] + (2 * (array[index[1][0]]-array[index[1][1]])) ) / 10
+        deltas[i] = (arr[index[0][0]]-arr[index[0][1]] + (2 * (arr[index[1][0]]-arr[index[1][1]]))) / 10
     return deltas
 
-def extract_features(audio,rate):   
-    mfcc_feat = mfcc.mfcc(audio,rate, 0.025, 0.01,20,appendEnergy = True)
-    
-    mfcc_feat = preprocessing.scale(mfcc_feat)
-    delta = calculate_delta(mfcc_feat)
-    combined = np.hstack((mfcc_feat,delta)) 
+def getMFCC(audio,rate):   
+    feature = mfcc.mfcc(audio, rate, 0.025, 0.01, 20, appendEnergy = True)
+    feature = preprocessing.scale(feature)
+    combined = np.hstack((feature, delta(feature))) 
     return combined
     
 if __name__ == "__main__":

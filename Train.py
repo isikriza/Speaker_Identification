@@ -10,7 +10,7 @@ import _pickle as cPickle
 import numpy as np
 from scipy.io.wavfile import read
 from sklearn.mixture import GMM 
-from SpeakerFeatures import extract_features
+from SpeakerFeatures import getMFCC
 import warnings
 warnings.filterwarnings("ignore")
    
@@ -26,7 +26,7 @@ file_paths = [os.path.join(source_speaker,fname) for fname in
 for path in file_paths:
     print (path)
     sr,audio = read(path)
-    vector = extract_features(audio,sr)
+    vector = getMFCC(audio,sr)
     gmm = GMM(n_components = 16, n_iter = 200, covariance_type='diag',n_init = 3)
     gmm.fit(vector)
         
@@ -44,7 +44,7 @@ file_paths = [os.path.join(source_male,fname) for fname in
 features = np.asarray(());
 for path in file_paths:
     sr,audio = read(path)
-    vector = extract_features(audio,sr)
+    vector = getMFCC(audio,sr)
     if features.size == 0:
         features = vector
     else:
@@ -65,7 +65,7 @@ file_paths = [os.path.join(source_female,fname) for fname in
 features = np.asarray(());
 for path in file_paths:
     sr,audio = read(path)
-    vector = extract_features(audio,sr)
+    vector = getMFCC(audio,sr)
     if features.size == 0:
         features = vector
     else:

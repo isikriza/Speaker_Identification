@@ -8,7 +8,7 @@ import os
 import _pickle as cPickle
 import numpy as np
 from scipy.io.wavfile import read
-from SpeakerFeatures import extract_features
+from SpeakerFeatures import getMFCC
 import warnings
 warnings.filterwarnings("ignore")
 import time
@@ -41,7 +41,7 @@ genders = [fname.split(".gmm")[0].split("\\")[1] for fname
 for path in file_paths:   
     print (path)
     sr,audio = read(path)
-    vector = extract_features(audio,sr)
+    vector = getMFCC(audio,sr)
     
     log_likelihood_speaker = np.zeros(len(models))
     log_likelihood_gender = np.zeros(len(genderModels))
